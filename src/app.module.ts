@@ -8,7 +8,7 @@ import { GeocodeModule } from './geocode/geocode.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     WeatherModule,
-    // ForecastModule,
+    ForecastModule,
     GeocodeModule,
   ],
 })
