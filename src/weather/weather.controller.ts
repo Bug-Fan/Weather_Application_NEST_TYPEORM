@@ -3,6 +3,7 @@ import {
   // ForecastRequestDto,
   GeocodeRequestDto,
 } from 'src/dto/request/geocode.request.dto';
+import { GeocodeResponseDto } from 'src/dto/response/geocode.response.dto';
 // import { ForecastResponseDto } from 'src/dto/response/geocode.response.dto';
 // import { ForecastService } from 'src/forecast/forecast.service';
 import { GeocodeService } from 'src/geocode/geocode.service';
@@ -24,7 +25,9 @@ export class WeatherController {
   // }
 
   @Get('geocode')
-  async getGeocode(@Body() geocodeRequestDto: GeocodeRequestDto) {
+  async getGeocode(
+    @Body() geocodeRequestDto: GeocodeRequestDto,
+  ): Promise<GeocodeResponseDto> {
     return await this.geocodeService.getGeocode(geocodeRequestDto);
   }
 }

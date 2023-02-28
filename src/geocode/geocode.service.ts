@@ -8,7 +8,9 @@ import { GeocodeResponseDto } from 'src/dto/response/geocode.response.dto';
 export class GeocodeService {
   constructor(private configService: ConfigService) {}
 
-  async getGeocode(geocodeRequestDto: GeocodeRequestDto) {
+  async getGeocode(
+    geocodeRequestDto: GeocodeRequestDto,
+  ): Promise<GeocodeResponseDto> {
     const { location } = geocodeRequestDto;
     const url = `http://dev.virtualearth.net/REST/v1/Locations?query=${encodeURI(
       location,
@@ -38,14 +40,11 @@ export class GeocodeService {
         // console.log(loc);
         matches.push(loc);
       });
-      const result = new GeocodeResponseDto(true, 'Results recieved', matches);
-      return result;
+      return new GeocodeResponseDto(true, 'Results recieved', matches);
       // console.log(matches);
     } catch (error) {
       if (error.response.status === 404) {
-        throw new BadRequestException(
-          'The weather forecast for  place you entered cannot be found because the place does not exist.',
-        );
+        throw new BadRequestException('Unable to find locations');
       }
     }
   }
