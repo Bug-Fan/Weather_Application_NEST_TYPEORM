@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class ForecastRequestDto {
+export class GeocodeRequestDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(3)
