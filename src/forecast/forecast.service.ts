@@ -11,7 +11,7 @@ export class ForecastService {
     forecastRequestDto: ForecastRequestDto,
   ): Promise<ForecastResponseDto> {
     const { latitude, longitude } = forecastRequestDto;
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this.configService.get(
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${this.configService.get(
       'FORECAST_API_TOKEN',
     )}`;
 
@@ -39,10 +39,10 @@ export class ForecastService {
       return forecastResponseDto;
     } catch (error) {
       if (error.response.status === 404) {
+        console.log(error);
         throw new BadRequestException(
           'The weather forecast for  place you entered cannot be found because the place does not exist.',
         );
-        console.log(error);
       }
     }
   }

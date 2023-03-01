@@ -52,22 +52,16 @@ export class AuthService {
       if (user) {
         const userId = user.userId;
         if (await compare(userPassword, user.userPassword)) {
-          // const payload = { userId, role: 'user' };
           const token: string = await this.jwtService.signAsync({ userId });
           return new LoginResponseDto(true, 'Login Successful', token);
         } else {
-          return new LoginResponseDto(
-            false,
-            'Your password is incorrect',
-            null,
-          );
+          return new LoginResponseDto(false, 'Your password is incorrect');
         }
       }
       if (!user) {
         return new LoginResponseDto(
           false,
           'You are not registered. Please Register',
-          null,
         );
       }
     } catch (error) {

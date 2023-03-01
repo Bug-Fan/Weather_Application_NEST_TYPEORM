@@ -1,13 +1,11 @@
 export class GeocodeResponseDto {
   status: boolean;
   message: string;
-  matches: any | null;
+  matches?: any | undefined;
 
-  constructor(status, message, matches) {
+  constructor(status, message, matches?: any | undefined) {
     this.status = status;
     this.message = message;
-    if (matches) {
-      this.matches = matches;
-    }
+    this.matches = matches;
   }
 }

@@ -26,15 +26,13 @@ export class GeocodeService {
         return new GeocodeResponseDto(
           false,
           'No results found for the place entered',
-          null,
         );
       }
       const matches = [];
       resources.forEach((element) => {
         // console.log(element.name, element.point.coordinates);
         const place = element.name;
-        const latitude = element.point.coordinates[0];
-        const longitude = element.point.coordinates[1];
+        const [latitude, longitude] = element.point.coordinates;
 
         const loc = new Object({ place, latitude, longitude });
         // console.log(loc);
