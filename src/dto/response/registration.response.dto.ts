@@ -1,5 +1,5 @@
 export class RegistrationResponseDto {
-  status: number;
+  status: boolean;
   message: string;
 
   constructor(status, message) {

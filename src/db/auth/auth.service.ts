@@ -2,12 +2,17 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserDto } from 'src/dto/request/user.dto';
 import { DataSource } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { genSalt, hash } from 'bcrypt';
+import { genSalt, hash, compare } from 'bcrypt';
 import { RegistrationResponseDto } from 'src/dto/response/registration.response.dto';
+import { JwtService } from '@nestjs/jwt';
+import { LoginResponseDto } from 'src/dto/response/login.response.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject('DataSource') private dataSource: DataSource) {}
+  constructor(
+    @Inject('DataSource') private dataSource: DataSource,
+    private jwtService: JwtService,
+  ) {}
 
   async registerUser(
     registerUserDto: UserDto,
@@ -36,6 +41,38 @@ export class AuthService {
         console.log(error);
         throw new BadRequestException('Unable to register you');
       }
+    }
+  }
+
+  async loginUser(loginUserDto: UserDto): Promise<LoginResponseDto> {
+    const { userEmail, userPassword } = loginUserDto;
+
+    try {
+      const user = await this.dataSource.manager.findOneBy(User, { userEmail });
+      if (user) {
+        const userId = user.userId;
+        if (await compare(userPassword, user.userPassword)) {
+          // const payload = { userId, role: 'user' };
+          const token: string = await this.jwtService.signAsync({ userId });
+          return new LoginResponseDto(true, 'Login Successful', token);
+        } else {
+          return new LoginResponseDto(
+            false,
+            'Your password is incorrect',
+            null,
+          );
+        }
+      }
+      if (!user) {
+        return new LoginResponseDto(
+          false,
+          'You are not registered. Please Register',
+          null,
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('Unable to log you in');
     }
   }
 }
