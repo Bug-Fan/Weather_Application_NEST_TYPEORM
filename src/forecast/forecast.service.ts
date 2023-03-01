@@ -25,7 +25,6 @@ export class ForecastService {
       const [{ description }] = weather;
       const { temp, feels_like, temp_max, temp_min, pressure, humidity } = main;
       const { speed } = wind;
-      console.log(data);
       const forecastResponseDto = new ForecastResponseDto(
         description,
         temp,

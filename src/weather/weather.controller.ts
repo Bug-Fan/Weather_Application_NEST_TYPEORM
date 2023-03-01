@@ -1,11 +1,13 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, UseGuards } from '@nestjs/common';
 import { GeocodeRequestDto } from 'src/dto/request/geocode.request.dto';
 import { GeocodeResponseDto } from 'src/dto/response/geocode.response.dto';
 import { ForecastResponseDto } from 'src/dto/response/forecast.response.dto';
 import { ForecastService } from 'src/forecast/forecast.service';
 import { GeocodeService } from 'src/geocode/geocode.service';
 import { ForecastRequestDto } from 'src/dto/request/forecast.request.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('weather')
 export class WeatherController {
   constructor(

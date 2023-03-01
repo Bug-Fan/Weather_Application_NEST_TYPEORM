@@ -5,8 +5,7 @@ import { User } from './entities/user.entity';
 export const DbConnection = [
   {
     provide: 'DataSource',
-    useFactory: async () => {
-      const configService = new ConfigService();
+    useFactory: async (configService: ConfigService) => {
       const datasource = new DataSource({
         type: 'postgres',
         host: configService.get('DB_HOST'),
@@ -20,5 +19,6 @@ export const DbConnection = [
       });
       return await datasource.initialize();
     },
+    inject: [ConfigService],
   },
 ];
