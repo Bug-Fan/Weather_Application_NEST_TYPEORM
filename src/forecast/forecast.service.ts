@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { ForecastRequestDto } from 'src/dto/request/forecast.request.dto';
@@ -38,6 +42,9 @@ export class ForecastService {
       );
       return forecastResponseDto;
     } catch (error) {
+      if (error.cause.code === 'EAI_AGAIN') {
+        throw new NotFoundException('Unable to reach Forecast API');
+      }
       if (error.response.status === 404) {
         console.log(error);
         throw new BadRequestException(

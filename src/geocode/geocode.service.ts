@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { GeocodeRequestDto } from 'src/dto/request/geocode.request.dto';
@@ -41,6 +45,9 @@ export class GeocodeService {
       return new GeocodeResponseDto(true, 'Results recieved', matches);
       // console.log(matches);
     } catch (error) {
+      if (error.cause.code === 'EAI_AGAIN') {
+        throw new NotFoundException('Unable to reach Geocode API');
+      }
       if (error.response.status === 404) {
         throw new BadRequestException('Unable to find locations');
       }
