@@ -19,7 +19,11 @@ export class AuthController {
 
   @Post('login')
   async loginUser(@Body() loginUserDto: UserDto): Promise<LoginResponseDto> {
-    console.log(process.env.JWT_SECRET_KEY);
     return await this.authService.loginUser(loginUserDto);
+  }
+
+  @Post('admin')
+  async loginAdmin(@Body() loginAdminDto: UserDto): Promise<LoginResponseDto> {
+    return await this.authService.loginAdmin(loginAdminDto);
   }
 }

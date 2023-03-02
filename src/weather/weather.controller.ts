@@ -13,8 +13,9 @@ import { GeocodeService } from 'src/geocode/geocode.service';
 import { ForecastRequestDto } from 'src/dto/request/forecast.request.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
+import { RoleGuard } from 'src/guards/role.guard';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), new RoleGuard('user'))
 @UseInterceptors(LoggingInterceptor)
 @Controller('weather')
 export class WeatherController {

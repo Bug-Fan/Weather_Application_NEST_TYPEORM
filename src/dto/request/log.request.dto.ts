@@ -10,6 +10,10 @@ export class LogRequestDto {
     this.path = path;
     this.method = method;
     this.body = body;
-    this.userId = userId;
+    if (userId !== 'admin') {
+      this.userId = userId;
+    } else {
+      this.userId = null;
+    }
   }
 }
