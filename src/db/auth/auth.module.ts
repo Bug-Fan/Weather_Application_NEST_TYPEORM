@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { DbConnection } from '../database.connection';
+import { LogService } from '../log.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
@@ -18,7 +19,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [...DbConnection, AuthService, JwtStrategy],
+  providers: [...DbConnection, AuthService, JwtStrategy, LogService],
   exports: [AuthService],
 })
 export class AuthModule {}

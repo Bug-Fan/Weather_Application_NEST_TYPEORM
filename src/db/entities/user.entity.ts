@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Log } from './log.entity';
 
 @Entity()
 export class User {
+  @OneToMany(() => Log, (k) => k.userId)
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
