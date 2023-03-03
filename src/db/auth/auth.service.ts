@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadGatewayException, Inject, Injectable } from '@nestjs/common';
 import { UserDto } from 'src/dto/request/user.dto';
 import { DataSource } from 'typeorm';
 import { User } from '../entities/user.entity';
@@ -41,7 +41,7 @@ export class AuthService {
         );
       } else {
         console.log(error);
-        throw new BadRequestException('Unable to register you');
+        throw new BadGatewayException('Unable to register you');
       }
     }
   }
@@ -71,7 +71,7 @@ export class AuthService {
       }
     } catch (error) {
       console.log(error);
-      throw new BadRequestException('Unable to log you in');
+      throw new BadGatewayException('Unable to log you in');
     }
   }
 
@@ -97,7 +97,7 @@ export class AuthService {
       }
     } catch (error) {
       console.log(error);
-      throw new BadRequestException('Unable to log you in');
+      throw new BadGatewayException('Unable to log you in');
     }
   }
 }

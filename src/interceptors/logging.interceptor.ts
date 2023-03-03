@@ -25,7 +25,6 @@ export class LoggingInterceptor implements NestInterceptor {
       const path = route.path;
       const log = new LogRequestDto(host, path, method, body, userId);
       const generated = await this.logservice.addlog(log);
-      console.log(generated);
     } catch (error) {
       console.log(error);
     } finally {

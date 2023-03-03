@@ -1,9 +1,12 @@
-import { IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsLatitude, IsLongitude } from 'class-validator';
 
 export class ForecastRequestDto {
-  @IsNumber({ maxDecimalPlaces: 10 })
+  @ApiProperty({ type: Number, example: '2.00212' })
+  @IsLatitude()
   latitude: number;
 
-  @IsNumber({ maxDecimalPlaces: 10 })
+  @ApiProperty({ type: Number, example: '2.00212' })
+  @IsLongitude()
   longitude: number;
 }
