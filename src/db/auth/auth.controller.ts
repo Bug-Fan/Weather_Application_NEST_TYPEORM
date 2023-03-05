@@ -24,7 +24,10 @@ export class AuthController {
 
   @Post('register')
   @ApiBody({ type: UserDto })
-  @ApiCreatedResponse({ description: 'User Registered' })
+  @ApiCreatedResponse({
+    type: RegistrationResponseDto,
+    description: 'User Registered',
+  })
   @ApiConflictResponse({ description: 'User already Registered' })
   async registerUser(
     @Body() registerUserDto: UserDto,
@@ -34,7 +37,7 @@ export class AuthController {
 
   @Post('login')
   @ApiBody({ type: UserDto })
-  @ApiOkResponse({ description: 'Login Successful' })
+  @ApiOkResponse({ type: LoginResponseDto, description: 'Login Successful' })
   @ApiBadRequestResponse({ description: 'Invalid credentials' })
   @ApiNotFoundResponse({ description: 'Not Registered' })
   @ApiBadGatewayResponse({ description: 'Unable to login' })
@@ -44,7 +47,7 @@ export class AuthController {
 
   @Post('admin')
   @ApiBody({ type: UserDto })
-  @ApiOkResponse({ description: 'Login Successful' })
+  @ApiOkResponse({ type: LoginResponseDto, description: 'Login Successful' })
   @ApiBadRequestResponse({ description: 'Invalid credentials' })
   @ApiUnauthorizedResponse({ description: 'User not admin' })
   @ApiBadGatewayResponse({ description: 'Unable to login' })

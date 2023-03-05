@@ -33,7 +33,10 @@ export class WeatherController {
   ) {}
 
   @ApiTags('forecast')
-  @ApiOkResponse({ description: 'Forecast recieved' })
+  @ApiOkResponse({
+    type: ForecastResponseDto,
+    description: 'Forecast recieved',
+  })
   @ApiNotFoundResponse({ description: 'Unable to reach forecast service' })
   @ApiBadRequestResponse({
     description: 'Forecast not found for entered place',
@@ -48,7 +51,7 @@ export class WeatherController {
   }
 
   @ApiTags('geocode')
-  @ApiOkResponse({ description: 'Geocodes recieved' })
+  @ApiOkResponse({ type: GeocodeResponseDto, description: 'Geocodes recieved' })
   @ApiNotFoundResponse({ description: 'Unable to reach geocode service' })
   @ApiBadRequestResponse({
     description: 'Geocodes not found for entered place',
