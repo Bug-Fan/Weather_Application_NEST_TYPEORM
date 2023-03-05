@@ -18,11 +18,8 @@ export class LogService {
         body,
         userId,
       });
-      if (addedlog) {
-        console.log('Log added');
-      }
     } catch (error) {
-      console.log('Log not added');
+      console.log(`Log not added \n ${error}`);
     }
   }
 }

@@ -4,6 +4,7 @@ import { ForecastModule } from './forecast/forecast.module';
 import { ConfigModule } from '@nestjs/config';
 import { GeocodeModule } from './geocode/geocode.module';
 import { DbModule } from './db/db.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DbModule } from './db/db.module';
     ForecastModule,
     GeocodeModule,
     DbModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

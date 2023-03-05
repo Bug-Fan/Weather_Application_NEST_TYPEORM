@@ -1,7 +1,7 @@
 import { BadGatewayException, Inject, Injectable } from '@nestjs/common';
 import { UserDto } from 'src/dto/request/user.dto';
 import { DataSource } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../db/entities/user.entity';
 import { genSalt, hash, compare } from 'bcrypt';
 import { RegistrationResponseDto } from 'src/dto/response/registration.response.dto';
 import { JwtService } from '@nestjs/jwt';
