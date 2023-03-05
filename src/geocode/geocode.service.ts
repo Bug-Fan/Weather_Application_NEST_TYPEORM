@@ -27,29 +27,24 @@ export class GeocodeService {
       });
       const { resources, estimatedTotal } = data.data.resourceSets[0];
       if (estimatedTotal === 0) {
-        return new GeocodeResponseDto(
-          false,
-          'No results found for the place entered',
-        );
+        throw new NotFoundException();
       }
       const matches = [];
       resources.forEach((element) => {
-        // console.log(element.name, element.point.coordinates);
         const place = element.name;
         const [latitude, longitude] = element.point.coordinates;
-
         const loc = new Object({ place, latitude, longitude });
-        // console.log(loc);
         matches.push(loc);
       });
       return new GeocodeResponseDto(true, 'Results recieved', matches);
-      // console.log(matches);
     } catch (error) {
-      if (error.cause.code === 'EAI_AGAIN') {
+      console.log(error);
+      if (error.status === 404) {
+        throw new BadRequestException(
+          'Unable to find matches for the entered place.',
+        );
+      } else if (error.cause.code === 'EAI_AGAIN') {
         throw new NotFoundException('Unable to reach Geocode API');
-      }
-      if (error.response.status === 404) {
-        throw new BadRequestException('Unable to find locations');
       }
     }
   }
