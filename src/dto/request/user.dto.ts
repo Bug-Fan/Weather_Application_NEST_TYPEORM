@@ -18,4 +18,9 @@ export class UserDto {
   @IsNotEmpty()
   @MinLength(3)
   userPassword: string;
+
+  constructor(userEmail, userPassword) {
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
+  }
 }

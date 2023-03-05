@@ -1,12 +1,19 @@
-import { BadGatewayException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserDto } from 'src/dto/request/user.dto';
 import { DataSource } from 'typeorm';
-import { User } from '../db/entities/user.entity';
 import { genSalt, hash, compare } from 'bcrypt';
 import { RegistrationResponseDto } from 'src/dto/response/registration.response.dto';
 import { JwtService } from '@nestjs/jwt';
 import { LoginResponseDto } from 'src/dto/response/login.response.dto';
 import { ConfigService } from '@nestjs/config';
+import { AuthDbService } from 'src/db/auth.db.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +21,7 @@ export class AuthService {
     @Inject('DataSource') private dataSource: DataSource,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private authDbService: AuthDbService,
   ) {}
 
   async registerUser(
@@ -25,24 +33,15 @@ export class AuthService {
       const salt = await genSalt();
       userPassword = await hash(userPassword, salt);
 
-      const added = await this.dataSource.manager.insert(User, {
-        userEmail,
-        userPassword,
-      });
-
+      const added = await this.authDbService.registerUser(
+        new UserDto(userEmail, userPassword),
+      );
+      console.log(typeof added);
       if (added) {
         return new RegistrationResponseDto(true, 'Registration successful');
       }
     } catch (error) {
-      if (error.code == 23505) {
-        return new RegistrationResponseDto(
-          false,
-          'You are already registered! Please login',
-        );
-      } else {
-        console.log(error);
-        throw new BadGatewayException('Unable to register you');
-      }
+      throw error;
     }
   }
 
@@ -50,7 +49,7 @@ export class AuthService {
     const { userEmail, userPassword } = loginUserDto;
 
     try {
-      const user = await this.dataSource.manager.findOneBy(User, { userEmail });
+      const user = await this.authDbService.loginUser(userEmail);
       if (user) {
         const userId = user.userId;
         if (await compare(userPassword, user.userPassword)) {
@@ -60,16 +59,17 @@ export class AuthService {
           });
           return new LoginResponseDto(true, 'Login Successful', token);
         } else {
-          return new LoginResponseDto(false, 'Your password is incorrect');
+          throw new BadRequestException();
         }
-      }
-      if (!user) {
-        return new LoginResponseDto(
-          false,
-          'You are not registered. Please Register',
-        );
+      } else {
+        throw new NotFoundException();
       }
     } catch (error) {
+      if (error.status === 404) {
+        throw new NotFoundException('You are not registered. Please Register');
+      } else if (error.status === 400) {
+        throw new BadRequestException('Your password is incorrect. Try again');
+      }
       console.log(error);
       throw new BadGatewayException('Unable to log you in');
     }
@@ -89,11 +89,11 @@ export class AuthService {
           });
           return new LoginResponseDto(true, 'Login Successful', token);
         } else {
-          return new LoginResponseDto(false, 'Your password is incorrect');
+          throw new BadRequestException('Your password is incorrect');
         }
       }
       if (!user) {
-        return new LoginResponseDto(false, 'You are not admin. Bye');
+        throw new UnauthorizedException('You are not admin. Bye');
       }
     } catch (error) {
       console.log(error);
