@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { GeocodeRequestDto } from 'src/dto/request/geocode.request.dto';
 import { GeocodeResponseDto } from 'src/dto/response/geocode.response.dto';
+import { LocationDto } from 'src/dto/response/location.dto';
 
 @Injectable()
 export class GeocodeService {
@@ -33,7 +34,7 @@ export class GeocodeService {
       resources.forEach((element) => {
         const place = element.name;
         const [latitude, longitude] = element.point.coordinates;
-        const loc = new Object({ place, latitude, longitude });
+        const loc = new LocationDto(place, latitude, longitude);
         matches.push(loc);
       });
       return new GeocodeResponseDto(true, 'Results recieved', matches);
