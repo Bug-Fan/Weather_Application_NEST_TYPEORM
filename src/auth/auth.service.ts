@@ -89,13 +89,18 @@ export class AuthService {
           });
           return new LoginResponseDto(true, 'Login Successful', token);
         } else {
-          throw new BadRequestException('Your password is incorrect');
+          throw new BadRequestException();
         }
       }
       if (!user) {
-        throw new UnauthorizedException('You are not admin. Bye');
+        throw new UnauthorizedException();
       }
     } catch (error) {
+      if (error.status === 400) {
+        throw new BadRequestException('Your password is incorrect. Try again');
+      } else if (error.status === 401) {
+        throw new UnauthorizedException('You are not admin. Bye');
+      }
       console.log(error);
       throw new BadGatewayException('Unable to log you in');
     }
