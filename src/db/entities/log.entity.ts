@@ -34,4 +34,7 @@ export class Log {
 
   @CreateDateColumn()
   timestamp: Date;
+
+  @Column({ nullable: true, default: null })
+  response: string;
 }

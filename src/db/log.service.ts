@@ -10,8 +10,21 @@ export class LogService {
   async addlog(logRequestDto: LogRequestDto) {
     try {
       const addedlog = await this.dataSource.manager.insert(Log, logRequestDto);
+      return addedlog;
     } catch (error) {
       console.log(`Log not added \n ${error}`);
+    }
+  }
+
+  async addLogResponse(requestId, response) {
+    try {
+      const addedresponse = await this.dataSource.manager.update(
+        Log,
+        { requestId },
+        { response },
+      );
+    } catch (error) {
+      console.log(`Log not updated \n ${error}`);
     }
   }
 }
