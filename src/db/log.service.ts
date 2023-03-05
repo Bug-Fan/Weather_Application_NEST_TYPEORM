@@ -8,16 +8,8 @@ export class LogService {
   constructor(@Inject('DataSource') private dataSource: DataSource) {}
 
   async addlog(logRequestDto: LogRequestDto) {
-    const { host, path, method, body, userId } = logRequestDto;
-
     try {
-      const addedlog = await this.dataSource.manager.insert(Log, {
-        host,
-        path,
-        method,
-        body,
-        userId,
-      });
+      const addedlog = await this.dataSource.manager.insert(Log, logRequestDto);
     } catch (error) {
       console.log(`Log not added \n ${error}`);
     }

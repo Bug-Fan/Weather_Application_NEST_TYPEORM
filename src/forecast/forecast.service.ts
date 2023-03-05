@@ -42,14 +42,13 @@ export class ForecastService {
       );
       return forecastResponseDto;
     } catch (error) {
-      if (error.cause.code === 'EAI_AGAIN') {
-        throw new NotFoundException('Unable to reach Forecast API');
-      }
-      if (error.response.status === 404) {
-        console.log(error);
+      console.log(error);
+      if (error.status === 404) {
         throw new BadRequestException(
-          'The weather forecast for  place you entered cannot be found because the place does not exist.',
+          'The weather forecast for  place you entered cannot be found.',
         );
+      } else if (error.cause.code === 'EAI_AGAIN') {
+        throw new NotFoundException('Unable to reach Geocode API');
       }
     }
   }

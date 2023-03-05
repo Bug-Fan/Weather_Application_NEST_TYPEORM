@@ -25,6 +25,9 @@ export class Log {
   @Column({ type: 'text' })
   body: string;
 
+  @Column({ type: 'text' })
+  query: string;
+
   @ManyToOne(() => User, (u) => u.userId, { nullable: true })
   @JoinColumn({ name: 'requestBy' })
   userId: string;

@@ -19,11 +19,11 @@ export class LoggingInterceptor implements NestInterceptor {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
     try {
-      const { body, route, user, headers, method } = request;
+      const { body, route, user, headers, method, query } = request;
       const userId = user?.userId;
       const host = headers.host;
       const path = route.path;
-      const log = new LogRequestDto(host, path, method, body, userId);
+      const log = new LogRequestDto(host, path, method, body, query, userId);
       const generated = await this.logservice.addlog(log);
     } catch (error) {
       console.log(error);
